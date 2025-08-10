@@ -1,24 +1,40 @@
-package com.SpringFullStackApp.StudentSystem.service;
+package com.SpringFullStackApp.StudentSystem.controller;
+
 import com.SpringFullStackApp.StudentSystem.model.Student;
-import com.SpringFullStackApp.StudentSystem.repository.StudentRepository;
+import com.SpringFullStackApp.StudentSystem.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Service
-public class StudentServiceImpl  implements StudentService{
+@RestController
+@RequestMapping("/student")
+@CrossOrigin
+public class StudentController {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentService studentService;
 
-    @Override
-    public Student saveStudent(Student student) {
-        return studentRepository.save(student);
+    @PostMapping("/add")
+    public String add(@RequestBody Student student) {
+        studentService.saveStudent(student);
+        return "New Student is added";
     }
 
-    @Override
+    @GetMapping("/getAll")
     public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+        return studentService.getAllStudents();
+    }
+
+    @PutMapping("/update/{id}")
+    public String updateStudent(@PathVariable int id, @RequestBody Student student) {
+        studentService.updateStudent(id, student);
+        return "Student updated successfully";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteStudent(@PathVariable int id) {
+        studentService.deleteStudent(id);
+        return "Student deleted successfully";
     }
 }
